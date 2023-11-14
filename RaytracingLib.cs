@@ -1,5 +1,5 @@
 
-namespace RaytracingBasics
+namespace Raytrace
 {
     public class RaytracingLib
     {

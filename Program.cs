@@ -10,7 +10,7 @@ using SixLabors.ImageSharp.Processing;
 
 
 
-namespace RaytracingBasics
+namespace Raytrace
 {
     class Program : RaytracingLib
     {
