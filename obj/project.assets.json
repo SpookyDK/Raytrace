@@ -49,11 +49,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/esben/Programmering/RaytracingBasics/RaytracingBasics.csproj",
+      "projectUniqueName": "/home/esben/Programmering/Raytrace/Raytrace/RaytracingBasics.csproj",
       "projectName": "RaytracingBasics",
-      "projectPath": "/home/esben/Programmering/RaytracingBasics/RaytracingBasics.csproj",
+      "projectPath": "/home/esben/Programmering/Raytrace/Raytrace/RaytracingBasics.csproj",
       "packagesPath": "/home/esben/.nuget/packages/",
-      "outputPath": "/home/esben/Programmering/RaytracingBasics/obj/",
+      "outputPath": "/home/esben/Programmering/Raytrace/Raytrace/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/esben/.nuget/NuGet/NuGet.Config"

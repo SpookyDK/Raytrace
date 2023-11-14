@@ -14,6 +14,7 @@ namespace Raytrace
 {
     class Program : RaytracingLib
     {
+        static float kage;
         static float pixeldistance = 0.003f;
         static int imagewidth = 1920;
         static int imageheight = 1080;
