@@ -1,0 +1,17 @@
+/home/esben/Programmering/RaytracingBasics/bin/Debug/net7.0/RaytracingBasics
+/home/esben/Programmering/RaytracingBasics/bin/Debug/net7.0/RaytracingBasics.deps.json
+/home/esben/Programmering/RaytracingBasics/bin/Debug/net7.0/RaytracingBasics.runtimeconfig.json
+/home/esben/Programmering/RaytracingBasics/bin/Debug/net7.0/RaytracingBasics.dll
+/home/esben/Programmering/RaytracingBasics/bin/Debug/net7.0/RaytracingBasics.pdb
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.GeneratedMSBuildEditorConfig.editorconfig
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.AssemblyInfoInputs.cache
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.AssemblyInfo.cs
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.csproj.CoreCompileInputs.cache
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.dll
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/refint/RaytracingBasics.dll
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.pdb
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.genruntimeconfig.cache
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/ref/RaytracingBasics.dll
+/home/esben/Programmering/RaytracingBasics/bin/Debug/net7.0/SixLabors.ImageSharp.dll
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.csproj.AssemblyReference.cache
+/home/esben/Programmering/RaytracingBasics/obj/Debug/net7.0/RaytracingBasics.csproj.CopyComplete

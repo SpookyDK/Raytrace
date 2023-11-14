@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "t9DLKS8ODi6YD7CJl03DrLIDp87AtsGC9kLD+wOuTBmQFWy1J/y51FZBcL24aJrnSBT4jYB50tIRgP5CSx2w4A==",
+  "success": true,
+  "projectFilePath": "/home/esben/Programmering/RaytracingBasics/RaytracingBasics.csproj",
+  "expectedPackageFiles": [
+    "/home/esben/.nuget/packages/sixlabors.imagesharp/3.0.2/sixlabors.imagesharp.3.0.2.nupkg.sha512",
+    "/home/esben/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.13/microsoft.aspnetcore.app.ref.7.0.13.nupkg.sha512"
+  ],
+  "logs": []
+}
