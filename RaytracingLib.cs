@@ -1,4 +1,8 @@
 
+using System;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace Raytrace
 {
     public class RaytracingLib
@@ -86,7 +90,12 @@ namespace Raytrace
             }
             else { return new float3(0, 0, 0); }
         }
-
+        static public Ray NormalizeRay(Ray ray)
+        {
+            float length = MathF.Sqrt(ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z);
+            Ray tempray = new Ray(ray.origin, new float3(ray.direction.x / length, ray.direction.y / length, ray.direction.z / length));
+            return tempray;
+        }
 
         static public float4 CalculateNormalPlane(Triangle tri)
         {
@@ -115,7 +124,7 @@ namespace Raytrace
 
             return Plane;
         }
-        static bool CheckInside(Triangle tri, Ray ray, float4 plane, float t, float3 intersect)
+        static public bool CheckInside(Triangle tri, Ray ray, float4 plane, float t, float3 intersect)
         {
 
             Ray edge1 = new Ray(tri.V1, new float3(tri.V2.x - tri.V1.x, tri.V2.y - tri.V1.y, tri.V2.z - tri.V1.z));
@@ -147,7 +156,7 @@ namespace Raytrace
 
 
         }
-        static bool CheckInside(Triangle tri, Ray ray, float t, float3 intersect)
+        static public bool CheckInside(Triangle tri, Ray ray, float t, float3 intersect)
         {
 
 
@@ -177,5 +186,39 @@ namespace Raytrace
 
 
         }
+
+        static public Image<Rgba32> CreateImage(int width, int height)
+        {
+            Image<Rgba32> image = new Image<Rgba32>(width, height);
+            return image;
+        }
+        static public void SaveImage(Image image, string localfilepath)
+        {
+            image.Save(@"localfilepath");
+        }
+        static public Ray[][] MakeCameraRayArray(int width, int height, Ray CameraRay, float PlaneDistance)
+        {
+            Ray[][] pixelrays = new Ray[width][];
+            Ray cameradirection = NormalizeRay(CameraRay);
+            Ray UpRay = new Ray(CameraRay.origin, new float3(0, 1, 0));
+            Ray Projectionplaneright = CrossP(cameradirection, UpRay);
+            Ray Projectionplaneup = CrossP(CameraRay, Projectionplaneright);
+            for (int i = 0; i < pixelrays.Length; i++)
+            {
+                pixelrays[i] = new Ray[height];
+                for (int j = 0; j < pixelrays[i].Length; j++)
+                {
+                    float3 planepos = new float3(CameraRay.origin.x + cameradirection.direction.x * PlaneDistance + Projectionplaneright.direction.x * i / width, CameraRay.origin.y + cameradirection.direction.y * PlaneDistance + Projectionplaneup.direction.y * j / height, CameraRay.origin.z + cameradirection.direction.z * PlaneDistance + Projectionplaneright.direction.z * i / width);
+                    pixelrays[i][j].origin = CameraRay.origin;
+                    pixelrays[i][j].direction = new float3(planepos.x - CameraRay.origin.x, planepos.y - CameraRay.origin.y, planepos.z - CameraRay.origin.z);
+                }
+            }
+            return pixelrays;
+
+        }
+
+
+
+
     }
 }
