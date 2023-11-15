@@ -14,14 +14,14 @@ namespace Raytrace
 {
     class Program : RaytracingLib
     {
-        static float kage;
-        static float pixeldistance = 0.003f;
-        static int imagewidth = 128;
-        static int imageheight = 128;
+        
+        
+        static int imagewidth = 256;
+        static int imageheight = 256;
 
 
 
-        static Ray Camera = new Ray(new float3(1, 2, -5), new float3(0, 0, 1));
+        static Ray Camera = new Ray(new float3(0, 2, 1.8f), new float3(0, 0, 1));
         static Ray[][] pixelrays;
 
         static public void Main()
@@ -34,7 +34,7 @@ namespace Raytrace
 
 
             //initialize the entire pixelray array.
-            pixelrays = MakeCameraRayArray(imagewidth, imageheight, Camera, 0.05f);
+            pixelrays = MakeCameraRayArray(imagewidth, imageheight, Camera, 0.01f);
             
             for (int i = 0; i < pixelrays.Length; i++)
             {

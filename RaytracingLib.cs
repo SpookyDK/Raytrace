@@ -201,24 +201,31 @@ namespace Raytrace
             Ray[][] pixelrays = new Ray[width][];
             Ray cameradirection = NormalizeRay(CameraRay);
             Ray UpRay = new Ray(CameraRay.origin, new float3(0, 1, 0));
-            Ray Projectionplaneright = CrossP(cameradirection, UpRay);
-            Ray Projectionplaneup = CrossP(CameraRay, Projectionplaneright);
+            Ray Projectionplaneright = CrossP(UpRay, cameradirection);
+            Ray Projectionplaneup = CrossP(cameradirection, Projectionplaneright);
+            float t1;
+            float t2;
             for (int i = 0; i < pixelrays.Length; i++)
             {
                 pixelrays[i] = new Ray[height];
                 for (int j = 0; j < pixelrays[i].Length; j++)
                 {
-                    float3 planepos = new float3(CameraRay.origin.x + cameradirection.direction.x * PlaneDistance + Projectionplaneright.direction.x * i / width, CameraRay.origin.y + cameradirection.direction.y * PlaneDistance + Projectionplaneup.direction.y * j / height, CameraRay.origin.z + cameradirection.direction.z * PlaneDistance + Projectionplaneright.direction.z * i / width);
+                    t1 = ((float)i / (float)width) - 0.5f;
+                    t2 = ((float)j / (float)height) - 0.5f;
+                    float xoffset = cameradirection.direction.x * PlaneDistance + Projectionplaneright.direction.x * t1 + Projectionplaneup.direction.x * t2;
+                    float yoffset = cameradirection.direction.y * PlaneDistance + Projectionplaneright.direction.y * t1 + Projectionplaneup.direction.y * t2;
+                    float zoffset = cameradirection.direction.z * PlaneDistance + Projectionplaneright.direction.z * t1 + Projectionplaneup.direction.z * t2;
+                    float3 planepos = new float3(xoffset, yoffset, zoffset);
                     pixelrays[i][j].origin = CameraRay.origin;
-                    pixelrays[i][j].direction = new float3(planepos.x - CameraRay.origin.x, planepos.y - CameraRay.origin.y, planepos.z - CameraRay.origin.z);
+                    pixelrays[i][j].direction = new float3(planepos.x, -planepos.y, planepos.z);
                 }
             }
             return pixelrays;
 
         }
-
-
-
-
     }
+
+
+
+
 }
