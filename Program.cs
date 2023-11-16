@@ -16,8 +16,8 @@ namespace Raytrace
     {
         
         
-        static int imagewidth = 256;
-        static int imageheight = 256;
+        static int imagewidth = 1920;
+        static int imageheight = 1080;
 
 
 
