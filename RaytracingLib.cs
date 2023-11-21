@@ -7,7 +7,7 @@ namespace Raytrace
 {
     public class RaytracingLib
     {
-        public static Ray CrossP(Ray ray1, Ray ray2)
+        static public Ray CrossP(Ray ray1, Ray ray2)
         {
             Ray temp = new Ray(ray1.origin, new float3(ray1.direction.y * ray2.direction.z - ray1.direction.z * ray2.direction.y, -(ray1.direction.x * ray2.direction.z - ray1.direction.z * ray2.direction.x), ray1.direction.x * ray2.direction.y - ray1.direction.y * ray2.direction.x));
             return temp;
@@ -108,8 +108,8 @@ namespace Raytrace
         }
         static public float4 CalculateNormalPlane(float3 V1, float3 V2, float3 V3)
         {
-            Ray edge1 = new Ray(V1, new float3(V1.x - V2.x, V1.y - V2.y, V1.z - V2.z));
-            Ray edge2 = new Ray(V1, new float3(V1.x - V3.x, V1.y - V3.y, V1.z - V3.z));
+            Ray edge1 = NormalizeRay(new Ray(V1, new float3(V1.x - V2.x, V1.y - V2.y, V1.z - V2.z)));
+            Ray edge2 = NormalizeRay(new Ray(V1, new float3(V1.x - V3.x, V1.y - V3.y, V1.z - V3.z)));
             Ray Normal = CrossP(edge1, edge2);
             float4 Plane = new float4(Normal.direction.x, Normal.direction.y, Normal.direction.z, 0);
             Plane.q = -Normal.direction.x * Normal.origin.x - Normal.direction.y * Normal.origin.y - Normal.direction.z * Normal.origin.z;
