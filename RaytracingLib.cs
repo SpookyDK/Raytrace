@@ -233,6 +233,15 @@ namespace Raytrace
             return pixelrays;
 
         }
+    
+        static public float3 MapRayToSkybox(Ray ray)
+        {
+            ray = NormalizeRay(ray);
+            float polar = MathF.Asin(ray.direction.y) / -MathF.PI;
+            float phi = MathF.Atan2(ray.direction.x, -ray.direction.z) / -MathF.PI * 0.5f;
+
+            return new float3(polar,phi,0);
+        }
     }
 
 
