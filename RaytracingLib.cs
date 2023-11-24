@@ -79,10 +79,10 @@ namespace Raytrace
 
 
             float t = (-tri.NormalPlane.x * ray.origin.x - tri.NormalPlane.y * ray.origin.y - tri.NormalPlane.z * ray.origin.z - tri.NormalPlane.q) / (tri.NormalPlane.x * ray.direction.x + tri.NormalPlane.y * ray.direction.y + tri.NormalPlane.z * ray.direction.z);
-
+        
             float3 intersect = new float3(ray.origin.x + ray.direction.x * t, ray.origin.y + ray.direction.y * t, ray.origin.z + ray.direction.z * t);
 
-            if (CheckInside(tri, ray, t, intersect))
+            if (CheckInside(tri, ray, t, intersect) && t>0)
             {
 
                 return intersect;
@@ -245,6 +245,22 @@ namespace Raytrace
     }
 
 
+    public class DirectionalLight : RaytracingLib
+    {
+        
 
+        public float3 Direction {get; set;}
+
+        public float Strength {get; set;}
+
+        public DirectionalLight(float3 direction, float strength)
+        {
+            
+            Direction = direction;
+            Strength = strength;
+        }
+
+
+    }
 
 }

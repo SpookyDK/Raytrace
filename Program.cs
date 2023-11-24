@@ -19,11 +19,11 @@ namespace Raytrace
         static int imagewidth = 512;
         static int imageheight = 512;
 
-        
-        
+
+
         static Ray Camera = new Ray(new float3(0, 2, -3), new float3(0, 0, 1));
         static Ray[][] pixelrays;
-        static Triangle[] Scenetris = new Triangle[3];
+        static Triangle[] Scenetris = new Triangle[5];
         static public void Main()
         {
             float frameTime = 0;
@@ -33,7 +33,8 @@ namespace Raytrace
             Scenetris[0] = new Triangle(new float3(2, 0, 2), new float3(-2, 0, 2), new float3(0, 4, 2f));
             Scenetris[1] = new Triangle(new float3(6, 0, 2), new float3(2, 0, 2), new float3(4, 2, 2.5f));
             Scenetris[2] = new Triangle(new float3(-6, 0, 2), new float3(-2, 0, 4), new float3(-4, 4, 1.9f));
-            
+            Scenetris[3] = new Triangle(new float3(100, 0, 100), new float3(-100, 0, 100), new float3(100, 0, -100));
+            Scenetris[4] = new Triangle(new float3(-100, 0, -100), new float3(-100, 0, 100), new float3(100, 0, -100));
 
             //initialize the entire pixelray array.
             pixelrays = MakeCameraRayArray(imagewidth, imageheight, Camera, 0.3f);
@@ -51,9 +52,7 @@ namespace Raytrace
                         if (intersect.x == 0 && intersect.y == 0 && intersect.z == 0 && !isColored)
                         {
                             float3 test = MapRayToSkybox(Ray);
-
-                    
-                            image[i, (int)index] = skybox[(int)(skybox.Width * test.y + skybox.Width*0.5),(int)((skybox.Height * test.x) + (skybox.Height*0.5))];
+                            image[i, (int)index] = skybox[(int)(skybox.Width * test.y + skybox.Width * 0.5), (int)((skybox.Height * test.x) + (skybox.Height * 0.5))];
                         }
                         else
                         {
@@ -75,7 +74,7 @@ namespace Raytrace
 
 
             }
-            System.Console.WriteLine("{0}   {1}",skybox.Width, skybox.Height);
+            System.Console.WriteLine("{0}   {1}", skybox.Width, skybox.Height);
             frameTime = (float)(DateTime.UtcNow - timeStampStart).TotalMilliseconds;
             System.Console.WriteLine(frameTime);
             Console.WriteLine("hey");
