@@ -16,13 +16,13 @@ namespace Raytrace
     {
 
 
-        static int imagewidth = 512;
-        static int imageheight = 512;
+        static int imagewidth = 1920;
+        static int imageheight = 1080;
 
 
 
         static Ray Camera = new Ray(new float3(0, 2, -3), new float3(0, 0, 1));
-        static Ray[][] pixelrays;
+        static Ray[][][] pixelrays;
         static Triangle[] Scenetris = new Triangle[5];
         static public void Main()
         {
@@ -33,11 +33,11 @@ namespace Raytrace
             Scenetris[0] = new Triangle(new float3(2, 0, 2), new float3(-2, 0, 2), new float3(0, 4, 2f));
             Scenetris[1] = new Triangle(new float3(6, 0, 2), new float3(2, 0, 2), new float3(4, 2, 2.5f));
             Scenetris[2] = new Triangle(new float3(-6, 0, 2), new float3(-2, 0, 4), new float3(-4, 4, 1.9f));
-            Scenetris[3] = new Triangle(new float3(100, 0, 100), new float3(-100, 0, 100), new float3(100, 0, -100));
+            Scenetris[3] = new Triangle(new float3(-100, 0, 100), new float3(100, 0, 100), new float3(100, 0, -100));
             Scenetris[4] = new Triangle(new float3(-100, 0, -100), new float3(-100, 0, 100), new float3(100, 0, -100));
 
             //initialize the entire pixelray array.
-            pixelrays = MakeCameraRayArray(imagewidth, imageheight, Camera, 0.3f);
+            pixelrays = MakeCameraRayArray(imagewidth, imageheight, Camera, 0.4f);
 
             for (int i = 0; i < pixelrays.Length; i++)
             {
@@ -47,11 +47,11 @@ namespace Raytrace
                     bool isColored = false;
                     foreach (Triangle tri in Scenetris)
                     {
-                        intersect = CalculateIntersection(tri, Ray);
+                        intersect = CalculateIntersection(tri, Ray[0]);
 
                         if (intersect.x == 0 && intersect.y == 0 && intersect.z == 0 && !isColored)
                         {
-                            float3 test = MapRayToSkybox(Ray);
+                            float3 test = MapRayToSkybox(Ray[0]);
                             image[i, (int)index] = skybox[(int)(skybox.Width * test.y + skybox.Width * 0.5), (int)((skybox.Height * test.x) + (skybox.Height * 0.5))];
                         }
                         else
