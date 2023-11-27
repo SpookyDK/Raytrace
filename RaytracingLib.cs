@@ -21,8 +21,19 @@ namespace Raytrace
             public float3 V1 { get; set; }
             public float3 V2 { get; set; }
             public float3 V3 { get; set; }
-            public float3 ColorAbsorb {get; set;}
+            public float3 ColorAbsorb { get; set; }
 
+            public Triangle(float3 vertex1, float3 vertex2, float3 vertex3)
+            {
+                V1 = vertex1;
+                V2 = vertex2;
+                V3 = vertex3;
+                NormalPlane = CalculateNormalPlane(vertex1, vertex2, vertex3);
+                edge1 = new Ray(vertex1, new float3(vertex2.x - vertex1.x, vertex2.y - vertex1.y, vertex2.z - vertex1.z));
+                edge2 = new Ray(vertex2, new float3(vertex3.x - vertex2.x, vertex3.y - vertex2.y, vertex3.z - vertex2.z));
+                edge3 = new Ray(vertex3, new float3(vertex1.x - vertex3.x, vertex1.y - vertex3.y, vertex1.z - vertex3.z));
+
+            }
             public Triangle(float3 vertex1, float3 vertex2, float3 vertex3, float3 Colorabsorb)
             {
                 V1 = vertex1;
@@ -39,11 +50,18 @@ namespace Raytrace
         {
             public float3 origin { get; set; }
             public float3 direction { get; set; }
-
+            public float3 Strength { get; set; }
             public Ray(float3 Origin, float3 Direction)
             {
                 origin = Origin;
                 direction = Direction;
+
+            }
+            public Ray(float3 Origin, float3 Direction, float3 strength)
+            {
+                origin = Origin;
+                direction = Direction;
+                float3 Strength;
             }
         }
 
@@ -75,21 +93,21 @@ namespace Raytrace
             }
 
         }
-        static public float3 CalculateIntersection(Triangle tri, Ray ray)
+        static public float4 CalculateIntersection(Triangle tri, Ray ray)
         {
 
 
             float t = (-tri.NormalPlane.x * ray.origin.x - tri.NormalPlane.y * ray.origin.y - tri.NormalPlane.z * ray.origin.z - tri.NormalPlane.q) / (tri.NormalPlane.x * ray.direction.x + tri.NormalPlane.y * ray.direction.y + tri.NormalPlane.z * ray.direction.z);
-        
-            float3 intersect = new float3(ray.origin.x + ray.direction.x * t, ray.origin.y + ray.direction.y * t, ray.origin.z + ray.direction.z * t);
 
-            if (CheckInside(tri, ray, t, intersect) && t>0)
+            float4 intersect = new float4(ray.origin.x + ray.direction.x * t, ray.origin.y + ray.direction.y * t, ray.origin.z + ray.direction.z * t, t);
+
+            if (CheckInside(tri, ray, t, intersect) && t > 0)
             {
 
                 return intersect;
 
             }
-            else { return new float3(0, 0, 0); }
+            else { return new float4(0, 0, 0, 1000); }
         }
         static public Ray NormalizeRay(Ray ray)
         {
@@ -125,7 +143,7 @@ namespace Raytrace
 
             return Plane;
         }
-        static public bool CheckInside(Triangle tri, Ray ray, float4 plane, float t, float3 intersect)
+        static public bool CheckInside(Triangle tri, Ray ray, float4 plane, float t, float4 intersect)
         {
 
             Ray edge1 = new Ray(tri.V1, new float3(tri.V2.x - tri.V1.x, tri.V2.y - tri.V1.y, tri.V2.z - tri.V1.z));
@@ -157,7 +175,7 @@ namespace Raytrace
 
 
         }
-        static public bool CheckInside(Triangle tri, Ray ray, float t, float3 intersect)
+        static public bool CheckInside(Triangle tri, Ray ray, float t, float4 intersect)
         {
 
 
@@ -207,46 +225,58 @@ namespace Raytrace
             for (int i = 0; i < pixelrays.Length; i++)
             {
                 pixelrays[i] = new Ray[height][];
-            
+
                 Parallel.ForEach(pixelrays[i], (Ray, state, index) =>
                 {
                     pixelrays[i][index] = new Ray[10];
-                    float t1 = ((float)i / (float)width) * ((float)width/(float)height) - 0.5f * ((float)width/(float)height);
-                    float t2 = (((float)index / (float)height) - 0.5f); 
+                    float t1 = ((float)i / (float)width) * ((float)width / (float)height) - 0.5f * ((float)width / (float)height);
+                    float t2 = (((float)index / (float)height) - 0.5f);
                     float xoffset = cameradirection.direction.x * PlaneDistance + Projectionplaneright.direction.x * t1 + Projectionplaneup.direction.x * t2;
                     float yoffset = cameradirection.direction.y * PlaneDistance + Projectionplaneright.direction.y * t1 + Projectionplaneup.direction.y * t2;
                     float zoffset = cameradirection.direction.z * PlaneDistance + Projectionplaneright.direction.z * t1 + Projectionplaneup.direction.z * t2;
                     float3 planepos = new float3(xoffset, yoffset, zoffset);
                     pixelrays[i][index][0].origin = CameraRay.origin;
                     pixelrays[i][index][0].direction = new float3(planepos.x, -planepos.y, planepos.z);
+                    pixelrays[i][index][0].Strength = new float3(1f, 1f, 1f);
                 });
             }
             return pixelrays;
 
         }
-    
+
         static public float3 MapRayToSkybox(Ray ray)
         {
             ray = NormalizeRay(ray);
             float polar = MathF.Asin(ray.direction.y) / -MathF.PI;
             float phi = MathF.Atan2(ray.direction.x, -ray.direction.z) / -MathF.PI * 0.5f;
 
-            return new float3(polar,phi,0);
+            return new float3(polar, phi, 0);
         }
+
+
+        static public float3 ReflektRay(Ray ray, Triangle tri)
+        {
+            Ray Normal = NormalizeRay(new Ray(new float3(0, 0, 0), new float3(tri.NormalPlane.x, tri.NormalPlane.y, tri.NormalPlane.z)));
+            float Dot = Normal.direction.x * ray.direction.x + Normal.direction.y * ray.direction.y + Normal.direction.z * ray.direction.z;
+            
+            float3 r = new float3(ray.direction.x - 2 * Dot * Normal.direction.x, ray.direction.y - 2 * Dot * Normal.direction.y, ray.direction.z - 2 * Dot * Normal.direction.z);
+            return r;
+        }
+
     }
 
 
     public class DirectionalLight : RaytracingLib
     {
-        
 
-        public float3 Direction {get; set;}
 
-        public float Strength {get; set;}
+        public float3 Direction { get; set; }
+
+        public float Strength { get; set; }
 
         public DirectionalLight(float3 direction, float strength)
         {
-            
+
             Direction = direction;
             Strength = strength;
         }
