@@ -43,29 +43,35 @@ namespace Raytrace
             {
                 Parallel.ForEach(pixelrays[i], (Ray, state, index) =>
                 {
-                    float3 intersect;
-                    bool isColored = false;
-                    foreach (Triangle tri in Scenetris)
+                    for (int i = 0; i < Ray.Length; i++)
                     {
-                        intersect = CalculateIntersection(tri, Ray[0]);
-
-                        if (intersect.x == 0 && intersect.y == 0 && intersect.z == 0 && !isColored)
-                        {
-                            float3 test = MapRayToSkybox(Ray[0]);
-                            image[i, (int)index] = skybox[(int)(skybox.Width * test.y + skybox.Width * 0.5), (int)((skybox.Height * test.x) + (skybox.Height * 0.5))];
-                        }
-                        else
+                        float3 intersect;
+                        bool isColored = false;
+                        foreach (Triangle tri in Scenetris)
                         {
 
-                            if (!isColored)
+                            intersect = CalculateIntersection(tri, Ray[0]);
+
+                            if (intersect.x == 0 && intersect.y == 0 && intersect.z == 0 && !isColored)
                             {
-                                isColored = true;
-                                image[i, (int)index] = Color.FromRgba(Convert.ToByte(255 * ((tri.NormalPlane.x / 2) + 0.5)), Convert.ToByte(255 * ((tri.NormalPlane.y / 2) + 0.5)), Convert.ToByte(255 * ((tri.NormalPlane.z / 2) + 0.5)), 255);
+                                float3 test = MapRayToSkybox(Ray[0]);
+                                image[i, (int)index] = skybox[(int)(skybox.Width * test.y + skybox.Width * 0.5), (int)((skybox.Height * test.x) + (skybox.Height * 0.5))];
                             }
+                            else
+                            {
+
+                                if (!isColored)
+                                {
+                                    isColored = true;
+                                    image[i, (int)index] = Color.FromRgba(Convert.ToByte(255 * ((tri.NormalPlane.x / 2) + 0.5)), Convert.ToByte(255 * ((tri.NormalPlane.y / 2) + 0.5)), Convert.ToByte(255 * ((tri.NormalPlane.z / 2) + 0.5)), 255);
+                                }
 
 
+                            }
                         }
                     }
+
+
 
                 });
 

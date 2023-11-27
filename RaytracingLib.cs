@@ -21,8 +21,9 @@ namespace Raytrace
             public float3 V1 { get; set; }
             public float3 V2 { get; set; }
             public float3 V3 { get; set; }
+            public float3 ColorAbsorb {get; set;}
 
-            public Triangle(float3 vertex1, float3 vertex2, float3 vertex3)
+            public Triangle(float3 vertex1, float3 vertex2, float3 vertex3, float3 Colorabsorb)
             {
                 V1 = vertex1;
                 V2 = vertex2;
@@ -31,7 +32,7 @@ namespace Raytrace
                 edge1 = new Ray(vertex1, new float3(vertex2.x - vertex1.x, vertex2.y - vertex1.y, vertex2.z - vertex1.z));
                 edge2 = new Ray(vertex2, new float3(vertex3.x - vertex2.x, vertex3.y - vertex2.y, vertex3.z - vertex2.z));
                 edge3 = new Ray(vertex3, new float3(vertex1.x - vertex3.x, vertex1.y - vertex3.y, vertex1.z - vertex3.z));
-
+                ColorAbsorb = Colorabsorb;
             }
         }
         public struct Ray
