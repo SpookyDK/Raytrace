@@ -16,8 +16,8 @@ namespace Raytrace
     {
 
 
-        static int imagewidth = 2000;
-        static int imageheight = 1000;
+        static int imagewidth = 1920;
+        static int imageheight = 1080;
 
 
 
@@ -46,14 +46,15 @@ namespace Raytrace
                 Parallel.ForEach(pixelrays[i], (Ray, state, index) =>
                 {
                     Ray = TraceRays(Ray, Scenetris);
+                    int templength = Ray.Length-1;
                     //System.Console.WriteLine("ray {0}    {1}    {2}",Ray[0].direction.x,Ray[0].direction.y,Ray[0].direction.z);
                     //System.Console.WriteLine("ray {0}    {1}    {2}", Ray[10].direction.x,Ray[10].direction.y,Ray[10].direction.z);
-                    float3 test = MapRayToSkybox(Ray[Ray.Length-1]);
+                    float3 test = MapRayToSkybox(Ray[templength]);
                     int temp1 = (int)(skybox.Width * test.y + skybox.Width * 0.5);
                     int temp2 = (int)((skybox.Height * test.x) + (skybox.Height * 0.5));
                     
                     
-                    image[i, (int)index] = Color.FromRgb(Convert.ToByte((int)(skybox[temp1, temp2].R* Ray[Ray.Length-1].Strength.x)), Convert.ToByte((int)(skybox[temp1, temp2].G * Ray[Ray.Length-1].Strength.y)), Convert.ToByte((int)(skybox[temp1, temp2].B * Ray[Ray.Length-1].Strength.z)));
+                    image[i, (int)index] = Color.FromRgb(Convert.ToByte((int)(skybox[temp1, temp2].R* Ray[templength].Strength.x)), Convert.ToByte((int)(skybox[temp1, temp2].G * Ray[templength].Strength.y)), Convert.ToByte((int)(skybox[temp1, temp2].B * Ray[templength].Strength.z)));
                     
 
 
