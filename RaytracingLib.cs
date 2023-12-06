@@ -101,7 +101,7 @@ namespace Raytrace
 
             float4 intersect = new float4(ray.origin.x + ray.direction.x * t, ray.origin.y + ray.direction.y * t, ray.origin.z + ray.direction.z * t, t);
 
-            if (CheckInside(tri, ray, t, intersect) && t > 0)
+            if (CheckInside(tri, ray, t, intersect) && t > 0.05)
             {
 
                 return intersect;
@@ -112,8 +112,12 @@ namespace Raytrace
         static public Ray NormalizeRay(Ray ray)
         {
             float length = MathF.Sqrt(ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z);
-            Ray tempray = new Ray(ray.origin, new float3(ray.direction.x / length, ray.direction.y / length, ray.direction.z / length));
+            Ray tempray = new Ray(ray.origin, new float3(ray.direction.x / length, ray.direction.y / length, ray.direction.z / length), ray.Strength);
             return tempray;
+        }
+        static public float Length(float3 point1, float3 point2)
+        {
+            return MathF.Sqrt(MathF.Pow(point1.x - point2.x, 2) + MathF.Pow(point1.y - point2.y, 2) + MathF.Pow(point1.z - point2.z, 2));
         }
 
         static public float4 CalculateNormalPlane(Triangle tri)
@@ -228,16 +232,25 @@ namespace Raytrace
 
                 Parallel.ForEach(pixelrays[i], (Ray, state, index) =>
                 {
-                    pixelrays[i][index] = new Ray[10];
+                    pixelrays[i][index] = new Ray[11];
                     float t1 = ((float)i / (float)width) * ((float)width / (float)height) - 0.5f * ((float)width / (float)height);
                     float t2 = (((float)index / (float)height) - 0.5f);
                     float xoffset = cameradirection.direction.x * PlaneDistance + Projectionplaneright.direction.x * t1 + Projectionplaneup.direction.x * t2;
                     float yoffset = cameradirection.direction.y * PlaneDistance + Projectionplaneright.direction.y * t1 + Projectionplaneup.direction.y * t2;
                     float zoffset = cameradirection.direction.z * PlaneDistance + Projectionplaneright.direction.z * t1 + Projectionplaneup.direction.z * t2;
                     float3 planepos = new float3(xoffset, yoffset, zoffset);
-                    pixelrays[i][index][0].origin = CameraRay.origin;
-                    pixelrays[i][index][0].direction = new float3(planepos.x, -planepos.y, planepos.z);
-                    pixelrays[i][index][0].Strength = new float3(1f, 1f, 1f);
+                    Ray temp = new Ray();
+                    temp.origin = CameraRay.origin;
+                    temp.direction = new float3(planepos.x, -planepos.y, planepos.z);
+                    temp.Strength = new float3(1f, 1f, 1f);
+
+
+                    pixelrays[i][index][0] = NormalizeRay(temp);
+                    pixelrays[i][index][0].Strength = temp.Strength;
+
+
+
+
                 });
             }
             return pixelrays;
@@ -258,11 +271,52 @@ namespace Raytrace
         {
             Ray Normal = NormalizeRay(new Ray(new float3(0, 0, 0), new float3(tri.NormalPlane.x, tri.NormalPlane.y, tri.NormalPlane.z)));
             float Dot = Normal.direction.x * ray.direction.x + Normal.direction.y * ray.direction.y + Normal.direction.z * ray.direction.z;
-            
-            float3 r = new float3(ray.direction.x - 2 * Dot * Normal.direction.x, ray.direction.y - 2 * Dot * Normal.direction.y, ray.direction.z - 2 * Dot * Normal.direction.z);
+
+            float3 r = new float3(ray.direction.x - (2 * Dot * Normal.direction.x), ray.direction.y - (2 * Dot * Normal.direction.y), ray.direction.z - (2 * Dot * Normal.direction.z));
             return r;
         }
 
+        static public Ray[] TraceRays(Ray[] rays, Triangle[] Scenetris)
+        {
+            for (int i = 0; i < rays.Length; i++)
+                    {
+                        float4 intersect = new float4(0, 0, 0, 100);
+                        Triangle temptri = new Triangle(new float3(0, 0, 0), new float3(0, 0, 0), new float3(0, 0, 0), new float3(0, 0, 0));
+
+
+                        foreach (Triangle tri in Scenetris)
+                        {
+
+                            float4 temp = CalculateIntersection(tri, rays[i]);
+                            if (temp.q < intersect.q)
+                            {
+                                intersect = temp;
+                                temptri = tri;
+                            }
+
+
+                        }
+                        if (intersect.x == 0 && intersect.y == 0 && intersect.z == 0)
+                        {
+                            rays[10].origin = new float3(0, 0, 0);
+                            rays[10].Strength = rays[i].Strength;
+                            rays[10].direction = rays[i].direction;
+                            break;
+                        }
+                        else
+                        {
+                            if (i < rays.Length - 1)
+                            {
+                                rays[i + 1].Strength = new float3(rays[i].Strength.x * temptri.ColorAbsorb.x, rays[i].Strength.y * temptri.ColorAbsorb.y, rays[i].Strength.z * temptri.ColorAbsorb.z);
+                                //System.Console.WriteLine("Strengt{0}         {1}         {2}    {3}",index, Ray[i].Strength.x, Ray[i].Strength.y, Ray[i].Strength.z);
+                                rays[i + 1].origin = new float3(intersect.x, intersect.y, intersect.z);
+                                rays[i + 1].direction = ReflektRay(rays[i], temptri);
+                            }
+                        }
+                        
+                    }
+            return rays;
+        }
     }
 
 
