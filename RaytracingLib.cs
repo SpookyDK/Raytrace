@@ -282,7 +282,7 @@ namespace Raytrace
                     {
                         float4 intersect = new float4(0, 0, 0, 100);
                         Triangle temptri = new Triangle(new float3(0, 0, 0), new float3(0, 0, 0), new float3(0, 0, 0), new float3(0, 0, 0));
-
+                        int templength = rays.Length-1;
 
                         foreach (Triangle tri in Scenetris)
                         {
@@ -298,9 +298,9 @@ namespace Raytrace
                         }
                         if (intersect.x == 0 && intersect.y == 0 && intersect.z == 0)
                         {
-                            rays[10].origin = new float3(0, 0, 0);
-                            rays[10].Strength = rays[i].Strength;
-                            rays[10].direction = rays[i].direction;
+                            rays[templength].origin = new float3(0, 0, 0);
+                            rays[templength].Strength = rays[i].Strength;
+                            rays[templength].direction = rays[i].direction;
                             break;
                         }
                         else
