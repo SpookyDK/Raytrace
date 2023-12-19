@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "la7uPxiuFGUFY6x9pZFCy0ltaSm6Z0DJce5egqyN2WrqSWzRAbcngA+l5mNR/icJq3XhaxqedICH9uXeT4n5hw==",
+  "dgSpecHash": "BpxYXucFsWieqGXF7ybXuBcl70mLj0NpzlafRyoFG6THFPC3Rlerwm3xx660TXH51kzeyCWwF92QtPAEV2OIXg==",
   "success": true,
   "projectFilePath": "/home/esben/Programmering/Raytrace/Raytrace/RaytracingBasics.csproj",
   "expectedPackageFiles": [
     "/home/esben/.nuget/packages/sixlabors.imagesharp/3.0.2/sixlabors.imagesharp.3.0.2.nupkg.sha512",
-    "/home/esben/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.13/microsoft.aspnetcore.app.ref.7.0.13.nupkg.sha512"
+    "/home/esben/.nuget/packages/microsoft.netcore.app.ref/7.0.14/microsoft.netcore.app.ref.7.0.14.nupkg.sha512",
+    "/home/esben/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.14/microsoft.aspnetcore.app.ref.7.0.14.nupkg.sha512",
+    "/home/esben/.nuget/packages/microsoft.netcore.app.host.linux-x64/7.0.14/microsoft.netcore.app.host.linux-x64.7.0.14.nupkg.sha512"
   ],
   "logs": []
 }
